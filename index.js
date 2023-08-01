@@ -1,3 +1,4 @@
+const https = require('https');
 require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -34,6 +35,50 @@ app.post('/webhook', (req, res) => {
     // Zoom validating you control the webhook endpoint https://marketplace.zoom.us/docs/api-reference/webhook-reference#validate-webhook-endpoint
     if(req.body.event === 'endpoint.url_validation') {
       const hashForValidate = crypto.createHmac('sha256', process.env.ZOOM_WEBHOOK_SECRET_TOKEN).update(req.body.payload.plainToken).digest('hex')
+
+    if(req.body.event === 'meeting.participant_left') {
+      const participantName = req.body.payload.object.participant.user_name;
+      const meetingId = req.body.payload.object.id;
+
+      const chatMessage = `${participantName} has left the meeting ${meetingId}.`;
+
+      // The URL of the Google Chat webhook
+      const googleChatWebhookUrl = new URL('https://chat.googleapis.com/v1/spaces/AAAAyOf0wuE/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=Xt3MZlLhwwBB4IylZYgZvSMfVX53_P9bpI7kIYHAnj8');
+
+      const postData = JSON.stringify({
+        'text': chatMessage,
+      });
+
+      const options = {
+        hostname: googleChatWebhookUrl.hostname,
+        path: googleChatWebhookUrl.pathname + googleChatWebhookUrl.search,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      };
+
+      const req = https.request(options, (res) => {
+        res.on('data', (d) => {
+          process.stdout.write(d);
+        });
+      });
+
+      req.on('error', (error) => {
+        console.error('Error sending message to Google Chat', error);
+      });
+
+      req.write(postData);
+      req.end();
+
+      response = { message: 'Participant left the meeting.', status: 200 };
+
+      console.log(response.message);
+
+      res.status(response.status);
+      res.json(response);
+    }
 
       response = {
         message: {
