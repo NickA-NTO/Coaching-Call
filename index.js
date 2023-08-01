@@ -36,46 +36,51 @@ app.post('/webhook', (req, res) => {
     if(req.body.event === 'endpoint.url_validation') {
       const hashForValidate = crypto.createHmac('sha256', process.env.ZOOM_WEBHOOK_SECRET_TOKEN).update(req.body.payload.plainToken).digest('hex')
 
-  if(req.body.event === 'meeting.participant_left') {
-    const participantName = req.body.payload.object.participant.user_name;
-    const meetingId = req.body.payload.object.id;
-  
-    const chatMessage = `${participantName} has left the meeting ${meetingId}.`;
-  
-    const postData = JSON.stringify({
-      'text': chatMessage,
+if(req.body.event === 'meeting.participant_left') {
+  const participantName = req.body.payload.object.participant.user_name;
+  const meetingId = req.body.payload.object.id;
+
+  const chatMessage = `${participantName} has left the meeting ${meetingId}.`;
+
+  const postData = JSON.stringify({
+    'text': chatMessage,
+  });
+
+  const options = {
+    hostname: googleChatWebhookUrl.hostname,
+    path: googleChatWebhookUrl.pathname + googleChatWebhookUrl.search,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(postData)
+    }
+  };
+
+  console.log("Posting the following data to Google Chat:");
+  console.log(postData);
+
+  const req = https.request(options, (res) => {
+    console.log("Google Chat responded with status code:", res.statusCode);
+    
+    res.on('data', (d) => {
+      console.log("Received data from Google Chat:", d.toString());
     });
-  
-    const options = {
-      hostname: googleChatWebhookUrl.hostname,
-      path: googleChatWebhookUrl.pathname + googleChatWebhookUrl.search,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData)
-      }
-    };
-  
-    const req = https.request(options, (res) => {
-      res.on('data', (d) => {
-        process.stdout.write(d);
-      });
-    });
-  
-    req.on('error', (error) => {
-      console.error('Error sending message to Google Chat', error);
-    });
-  
-    req.write(postData);
-    req.end();
-  
-    response = { message: 'Participant left the meeting.', status: 200 };
-  
-    console.log(response.message);
-  
-    res.status(response.status);
-    res.json(response);
-  }
+  });
+
+  req.on('error', (error) => {
+    console.error('Error sending message to Google Chat:', error);
+  });
+
+  req.write(postData);
+  req.end();
+
+  response = { message: 'Participant left the meeting.', status: 200 };
+
+  console.log(response.message);
+
+  res.status(response.status);
+  res.json(response);
+}
 })
 
 app.listen(port, () => console.log(`Zoom Webhook sample listening on port ${port}!`))
