@@ -32,6 +32,14 @@ app.post('/webhook', (req, res) => {
     const participantName = req.body.payload.object.participant.user_name;
     const meetingId = req.body.payload.object.id;
 
+    // List of meeting IDs you're interested in
+    const targetMeetingIds = ['7214926104', '3401482925', '2173325443', '7873022402', '5257477503'];
+
+    if (!targetMeetingIds.includes(meetingId)) {
+        console.log(`Ignoring meeting ID: ${meetingId}`);
+        return res.status(200).end();
+    }
+
     const chatMessage = `${participantName} has left the meeting ${meetingId}.`;
     const postData = JSON.stringify({ 'text': chatMessage });
 
