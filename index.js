@@ -42,9 +42,6 @@ app.post('/webhook', (req, res) => {
 
       const chatMessage = `${participantName} has left the meeting ${meetingId}.`;
 
-      // The URL of the Google Chat webhook
-      const googleChatWebhookUrl = new URL('https://chat.googleapis.com/v1/spaces/AAAAyOf0wuE/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=Xt3MZlLhwwBB4IylZYgZvSMfVX53_P9bpI7kIYHAnj8');
-
       const postData = JSON.stringify({
         'text': chatMessage,
       });
