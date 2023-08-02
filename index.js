@@ -30,17 +30,17 @@ app.post('/webhook', (req, res) => {
 
   if(req.body.event === 'meeting.participant_left') {
     const participantName = req.body.payload.object.participant.user_name;
-    const meetingId = req.body.payload.object.id;
+    const hostName = req.body.payload.object.host; // Added this line
 
-    // List of meeting IDs you're interested in
-    const targetMeetingIds = ['7214926104', '3401482925', '2173325443', '7873022402', '5257477503'];
+    // List of host names you're interested in
+    const targetHostNames = ['Alpha Proctor 3']; // Modify this line
 
-    if (!targetMeetingIds.includes(meetingId)) {
-        console.log(`Ignoring meeting ID: ${meetingId}`);
+    if (!targetHostNames.includes(hostName)) { // Modified this line
+        console.log(`Ignoring host: ${hostName}`);
         return res.status(200).end();
     }
 
-    const chatMessage = `${participantName} has left the meeting ${meetingId}.`;
+    const chatMessage = `${participantName} has left a meeting hosted by ${hostName}.`; // Modified this line
     const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
@@ -71,5 +71,4 @@ app.post('/webhook', (req, res) => {
 
   res.status(200).end();
 })
-
 app.listen(port, () => console.log(`Zoom Webhook sample listening on port ${port}!`))
