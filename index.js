@@ -30,6 +30,7 @@ app.post('/webhook', (req, res) => {
 
   if(req.body.event === 'meeting.participant_left') {
     const participantName = req.body.payload.object.participant.user_name;
+    const meetingId = req.body.payload.object.id;
 
     // List of meeting IDs you're interested in
     const targetMeetingIds = ['7214926104', '3401482925', '2173325443', '7873022402', '5257477503'];
@@ -39,7 +40,7 @@ app.post('/webhook', (req, res) => {
         return res.status(200).end();
     }
 
-    const chatMessage = `${participantName} has left the meeting.`;
+    const chatMessage = `${participantName} has left the meeting ${meetingId}.`;
     const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
