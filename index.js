@@ -31,11 +31,11 @@ app.post('/webhook', (req, res) => {
   if(req.body.event === 'meeting.participant_left') {
     const participantName = req.body.payload.object.participant.user_name;
 
-    // List of participant names you're interested in
-    const targetNames = ['Alpha Autoproctor 3', 'alphaproctor3@alpha.school'];
+    // List of meeting IDs you're interested in
+    const targetMeetingIds = ['7214926104', '3401482925', '2173325443', '7873022402', '5257477503'];
 
-    if (!targetNames.includes(participantName)) {
-        console.log(`Ignoring participant: ${participantName}`);
+    if (!targetMeetingIds.includes(meetingId)) {
+        console.log(`Ignoring meeting ID: ${meetingId}`);
         return res.status(200).end();
     }
 
