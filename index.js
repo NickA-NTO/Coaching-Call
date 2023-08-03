@@ -31,6 +31,9 @@ app.post('/webhook', (req, res) => {
   if(req.body.event === 'meeting.participant_left') {
     const participantName = req.body.payload.object.participant.user_name;
     const meetingId = req.body.payload.object.id;
+    const hostId = req.body.payload.object.host_id; // User ID of the host
+
+    console.log(`Host ID: ${hostId}`); // Log the host ID
 
     // List of meeting IDs you're interested in
     const targetMeetingIds = ['7214926104', '3401482925', '2173325443', '7873022402', '5257477503'];
