@@ -8,6 +8,31 @@ const app = express()
 const port = process.env.PORT || 4000
 const googleChatWebhookUrl = new URL(process.env.GOOGLE_CHAT_WEBHOOK_URL)
 
+app.post('/webhook', (req, res) => {
+  console.log(req.headers)
+  console.log(req.body)
+
+  const message = `v0:${req.headers['x-zm-request-timestamp']}:${JSON.stringify(req.body)}`
+  const hashForVerify = crypto.createHmac('sha256', process.env.ZOOM_WEBHOOK_SECRET_TOKEN).update(message).digest('hex')
+  const signature = `v0=${hashForVerify}`
+
+  if (req.headers['x-zm-signature'] !== signature) {
+    console.log('Unauthorized request to Zoom Webhook.')
+    return res.status(403).end()
+  }
+
+  // Handle the URL validation event
+  if(req.body.event === 'endpoint.url_validation') {
+    return res.json({ challenge: req.body.payload.challenge });
+  }
+  
+  if(req.body.event === 'meeting.participant_joined') {
+    // ... the rest of your code ...
+  }
+
+  res.status(200).end();
+})
+
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
