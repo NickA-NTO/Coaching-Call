@@ -43,7 +43,7 @@ app.post('/webhook', (req, res) => {
         return res.status(200).end();
     }
 
-    const chatMessage = `${participantName} has joined Coachign Room ${meetingId}.`; // Changed to 'has joined'
+    const chatMessage = `${participantName} has joined Coaching Room ${meetingId}.`; // Changed to 'has joined'
     const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
