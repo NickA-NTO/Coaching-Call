@@ -29,9 +29,9 @@ app.post('/webhook', (req, res) => {
   }
 
   // Handle the URL validation event
-  if(req.body.event === 'endpoint.url_validation') {
-    return res.json({ challenge: req.body.payload.plainToken });
-  }
+if(req.body.event === 'endpoint.url_validation') {
+  return res.json({ challenge: req.body.payload.plainToken });
+}
 
   if(req.body.event === 'meeting.participant_joined') {
     const participantName = req.body.payload.object.participant.user_name;
