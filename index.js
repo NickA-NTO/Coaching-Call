@@ -28,7 +28,7 @@ app.post('/webhook', (req, res) => {
     return res.status(403).end()
   }
 
-  if(req.body.event === 'meeting.participant_left') {
+  if(req.body.event === 'meeting.participant_joined') {
     const participantName = req.body.payload.object.participant.user_name;
     const meetingId = req.body.payload.object.id;
 
@@ -40,7 +40,7 @@ app.post('/webhook', (req, res) => {
         return res.status(200).end();
     }
 
-    const chatMessage = `${participantName} has left the meeting ${meetingId}.`;
+    const chatMessage = `${participantName} has joined coaching room ${meetingId}.`;
     const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
