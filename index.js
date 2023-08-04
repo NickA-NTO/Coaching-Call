@@ -28,7 +28,7 @@ app.post('/webhook', (req, res) => {
     return res.status(403).end()
   }
 
-  if(req.body.event === 'meeting.participant_left') {
+  if(req.body.event === 'meeting.participant_joined') { // Changed to 'meeting.participant_joined'
     const participantName = req.body.payload.object.participant.user_name;
     const meetingId = req.body.payload.object.id;
     const hostId = req.body.payload.object.host_id; // User ID of the host
@@ -36,14 +36,14 @@ app.post('/webhook', (req, res) => {
     console.log(`Host ID: ${hostId}`); // Log the host ID
 
     // List of meeting IDs you're interested in
-    const targetMeetingIds = ['7214926104', '3401482925', '2173325443', '7873022402', '5257477503'];
+    const targetMeetingIds = ['5257477503'];
 
     if (!targetMeetingIds.includes(meetingId)) {
         console.log(`Ignoring meeting ID: ${meetingId}`);
         return res.status(200).end();
     }
 
-    const chatMessage = `${participantName} has left the meeting ${meetingId}.`;
+    const chatMessage = `${participantName} has joined Coachign Room ${meetingId}.`; // Changed to 'has joined'
     const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
