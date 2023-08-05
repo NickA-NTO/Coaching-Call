@@ -33,7 +33,7 @@ app.post('/webhook', (req, res) => {
     const meetingId = req.body.payload.object.id;
 
     // List of meeting IDs you're interested in
-    const targetMeetingIds = ['7214926104', '3401482925', '2173325443', '7873022402', '5257477503'];
+    const targetMeetingIds = ['7873022402', '5257477503'];
 
     if (!targetMeetingIds.includes(meetingId)) {
         console.log(`Ignoring meeting ID: ${meetingId}`);
