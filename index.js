@@ -57,7 +57,7 @@ app.post('/webhook', (req, res) => {
       res.status(response.status)
       res.json(response)
 
-      if(req.body.event === 'meeting.participant_joined') {
+  if(req.body.event === 'meeting.participant_joined') {
     const participantName = req.body.payload.object.participant.user_name;
     const meetingId = req.body.payload.object.id;
 
