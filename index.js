@@ -30,53 +30,45 @@ app.post('/webhook', (req, res) => {
   // hash the message string with your Webhook Secret Token and prepend the version semantic
   const signature = `v0=${hashForVerify}`
 
-  if (req.headers['x-zm-signature'] !== signature) {
-    console.log('Unauthorized request to Zoom Webhook.')
-    return res.status(403).end()
-  }
+  // you validating the request came from Zoom https://marketplace.zoom.us/docs/api-reference/webhook-reference#notification-structure
+  if (req.headers['x-zm-signature'] === signature) {
 
-  if(req.body.event === 'meeting.participant_joined') {
-    const participantName = req.body.payload.object.participant.user_name;
-    const meetingId = req.body.payload.object.id;
+    // Zoom validating you control the webhook endpoint https://marketplace.zoom.us/docs/api-reference/webhook-reference#validate-webhook-endpoint
+    if(req.body.event === 'endpoint.url_validation') {
+      const hashForValidate = crypto.createHmac('sha256', process.env.ZOOM_WEBHOOK_SECRET_TOKEN).update(req.body.payload.plainToken).digest('hex')
 
-    // List of meeting IDs you're interested in
-    const targetMeetingIds = ['7873022402', '5257477503'];
-
-    if (!targetMeetingIds.includes(meetingId)) {
-        console.log(`Ignoring meeting ID: ${meetingId}`);
-        return res.status(200).end();
-    }
-
-    const chatMessage = `${participantName} has joined coaching room ${meetingId}.`;
-    const postData = JSON.stringify({ 'text': chatMessage });
-
-    const options = {
-      hostname: googleChatWebhookUrl.hostname,
-      path: googleChatWebhookUrl.pathname + googleChatWebhookUrl.search,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData)
+      response = {
+        message: {
+          plainToken: req.body.payload.plainToken,
+          encryptedToken: hashForValidate
+        },
+        status: 200
       }
-    };
 
-    const googleChatRequest = https.request(options, (googleChatRes) => {
-      googleChatRes.on('data', (d) => {
-        process.stdout.write(d);
-      });
-    });
+      console.log(response.message)
 
-    googleChatRequest.on('error', (error) => {
-      console.error('Error sending message to Google Chat', error);
-    });
+      res.status(response.status)
+      res.json(response.message)
+    } else {
+      response = { message: 'Authorized request to Zoom Webhook sample.', status: 200 }
 
-    googleChatRequest.write(postData);
-    googleChatRequest.end();
+      console.log(response.message)
 
-    console.log(`Message sent to Google Chat: ${chatMessage}`);
+      res.status(response.status)
+      res.json(response)
+
+      // business logic here, example make API request to Zoom or 3rd party
+
+    }
+  } else {
+
+    response = { message: 'Unauthorized request to Zoom Webhook sample.', status: 401 }
+
+    console.log(response.message)
+
+    res.status(response.status)
+    res.json(response)
   }
-
-  res.status(200).end();
 })
 
 app.listen(port, () => console.log(`Zoom Webhook sample listening on port ${port}!`))
