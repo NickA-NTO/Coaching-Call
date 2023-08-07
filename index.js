@@ -22,8 +22,12 @@ app.post('/webhook', (req, res) => {
   console.log(req.headers)
   console.log(req.body)
 
+  // construct the message string
   const message = `v0:${req.headers['x-zm-request-timestamp']}:${JSON.stringify(req.body)}`
+
   const hashForVerify = crypto.createHmac('sha256', process.env.ZOOM_WEBHOOK_SECRET_TOKEN).update(message).digest('hex')
+
+  // hash the message string with your Webhook Secret Token and prepend the version semantic
   const signature = `v0=${hashForVerify}`
 
   if (req.headers['x-zm-signature'] !== signature) {
