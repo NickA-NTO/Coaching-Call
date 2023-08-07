@@ -16,8 +16,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/webhook', (req, res) => {
-  console.log(req.headers)
-  console.log(req.body)
+
   var response
 
   console.log(req.headers)
@@ -45,6 +44,18 @@ app.post('/webhook', (req, res) => {
         },
         status: 200
       }
+
+      console.log(response.message)
+
+      res.status(response.status)
+      res.json(response.message)
+    } else {
+      response = { message: 'Authorized request to Zoom Webhook sample.', status: 200 }
+
+      console.log(response.message)
+
+      res.status(response.status)
+      res.json(response)
 
   if(req.body.event === 'meeting.participant_joined') {
     const participantName = req.body.payload.object.participant.user_name;
