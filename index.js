@@ -73,9 +73,9 @@ app.post('/webhook', (req, res) => {
         return res.status(200).end();
     }
 
-      const topic = req.body.payload.object.topic; // Get the meeting topic from Zoom webhook payload
-      const chatMessage = `${participantName} has joined coaching room: "${topic}".`;
-      const postData = JSON.stringify({ 'text': chatMessage });
+    const topic = req.body.payload.object.topic; // Get the meeting topic from Zoom webhook payload
+    const chatMessage = `FLOATING COACHING CALL: ${participantName} has joined their coaching session: "${topic}".`; // Changed message here
+    const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
       hostname: googleChatWebhookUrl.hostname,
