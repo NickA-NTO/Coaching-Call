@@ -73,7 +73,8 @@ app.post('/webhook', (req, res) => {
         return res.status(200).end();
     }
 
-    const chatMessage = `${participantName} has joined coaching room ${meetingId}.`;
+    const userName = req.body.payload.object.participant.user_name; // Get user name from Zoom webhook payload
+    const chatMessage = `${participantName} has joined coaching room ${userName}.`;
     const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
