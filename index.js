@@ -74,7 +74,7 @@ app.post('/webhook', (req, res) => {
     }
 
       const topic = req.body.payload.object.topic; // Get the meeting topic from Zoom webhook payload
-      const chatMessage = `${participantName} has joined coaching room: "${topic}".`;
+      const chatMessage = `COACHING CALL: ${participantName} has joined coaching room: "${topic}".`;
       const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
