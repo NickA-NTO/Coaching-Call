@@ -72,7 +72,12 @@ app.post('/webhook', (req, res) => {
         console.log(`Ignoring meeting ID: ${meetingId}`);
         return res.status(200).end();
     }
-
+    
+     // List of participant names to ignore
+    const ignoredParticipants = [
+    'Nick Alsford'
+  ];
+    
     const topic = req.body.payload.object.topic; // Get the meeting topic from Zoom webhook payload
     const chatMessage = `FLOATING COACHING CALL: ${participantName} has joined their coaching session: "${topic}".`; // Changed message here
     const postData = JSON.stringify({ 'text': chatMessage });
