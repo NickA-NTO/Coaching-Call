@@ -60,7 +60,7 @@ app.post('/webhook', (req, res) => {
   if(req.body.event === 'meeting.participant_joined') {
     const participantName = req.body.payload.object.participant.user_name;
     const meetingId = req.body.payload.object.id;
-
+  
     // List of meeting IDs you're interested in
     const targetMeetingIds = [
       '7529538283', '8230366299', '5944978371', '4541815666', '8240787316',
@@ -69,7 +69,33 @@ app.post('/webhook', (req, res) => {
     ];
   
     // List of participant names to ignore
-    const ignoredParticipants = ['Nick Alsford'];
+    const ignoredParticipants = [
+      'Nick Alsford',
+      'Vidhi Vashishth',
+      'Ruchi Baid',
+      'Otavio Rocha',
+      'Omolara Salawu',
+      'Mallika Alai',
+      'Laura Mejia',
+      'Lakshmy Sobha',
+      'Karina Jimenez',
+      'Joshua Albar',
+      'Joao Pinto',
+      'Javier Rodriguez',
+      'Ilma Cohadzic',
+      'Himanshi Goyal',
+      'Haannie Kazmi',
+      'Filipe Barcellos',
+      'David Babagbale',
+      'Daniela Guarin',
+      'Bruna Rodrigues',
+      'Brenno Peserico',
+      'Audri Wolfaardt',
+      'Arslan Imtiaz',
+      'Airic Carrillo',
+      'Raditya Dwiprasta',
+      'Rio Purnomo'
+    ];
   
     if (!targetMeetingIds.includes(meetingId) || ignoredParticipants.includes(participantName)) {
       console.log(`Ignoring meeting ID: ${meetingId} or participant: ${participantName}`);
