@@ -63,23 +63,21 @@ app.post('/webhook', (req, res) => {
 
     // List of meeting IDs you're interested in
     const targetMeetingIds = [
-  '7529538283', '8230366299', '5944978371', '4541815666', '8240787316',
-  '7363344485', '8686142782', '7848749909', '6030598690', '3569538459',
-  '2943012912', '4835843786', '5088144791', '6446311624', '9773038851'
-];
-
-    if (!targetMeetingIds.includes(meetingId)) {
-        console.log(`Ignoring meeting ID: ${meetingId}`);
-        return res.status(200).end();
+      '7529538283', '8230366299', '5944978371', '4541815666', '8240787316',
+      '7363344485', '8686142782', '7848749909', '6030598690', '3569538459',
+      '2943012912', '4835843786', '5088144791', '6446311624', '9773038851'
+    ];
+  
+    // List of participant names to ignore
+    const ignoredParticipants = ['Nick Alsford'];
+  
+    if (!targetMeetingIds.includes(meetingId) || ignoredParticipants.includes(participantName)) {
+      console.log(`Ignoring meeting ID: ${meetingId} or participant: ${participantName}`);
+      return res.status(200).end();
     }
-    
-     // List of participant names to ignore
-    const ignoredParticipants = [
-    'Nick Alsford'
-  ];
-    
-    const topic = req.body.payload.object.topic; // Get the meeting topic from Zoom webhook payload
-    const chatMessage = `FLOATING COACHING CALL: ${participantName} has joined their coaching session: "${topic}".`; // Changed message here
+  
+    const topic = req.body.payload.object.topic;
+    const chatMessage = `FLOATING COACHING CALL: ${participantName} has joined their coaching session: "${topic}".`;
     const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
