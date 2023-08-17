@@ -70,7 +70,6 @@ app.post('/webhook', (req, res) => {
   
     // List of participant names to ignore
     const ignoredParticipants = [
-      'Nick Alsford',
       'Vidhi Vashishth',
       'Ruchi Baid',
       'Otavio Rocha',
