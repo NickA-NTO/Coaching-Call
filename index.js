@@ -65,11 +65,36 @@ app.post('/webhook', (req, res) => {
     const targetMeetingIds = [
       '7529538283', '8230366299', '5944978371', '4541815666', '8240787316',
       '7363344485', '8686142782', '7848749909', '6030598690', '3569538459',
-      '2943012912', '4835843786', '5088144791', '6446311624', '9773038851'
+      '2943012912', '4835843786', '5088144791', '6446311624', '9773038851',
+      '4780763670'
     ];
   
     // List of participant names to ignore
     const ignoredParticipants = [
+      'Vidhi Vashishth',
+      'Ruchi Baid',
+      'Otavio Rocha',
+      'Omolara Salawu',
+      'Mallika Alai',
+      'Laura Mejia',
+      'Lakshmy Sobha',
+      'Karina Jimenez',
+      'Joshua Albar',
+      'Joao Pinto',
+      'Javier Rodriguez',
+      'Ilma Cohadzic',
+      'Himanshi Goyal',
+      'Haannie Kazmi',
+      'Filipe Barcellos',
+      'David Babagbale',
+      'Daniela Guarin',
+      'Bruna Rodrigues',
+      'Brenno Peserico',
+      'Audri Wolfaardt',
+      'Arslan Imtiaz',
+      'Airic Carrillo',
+      'Raditya Dwiprasta',
+      'Rio Purnomo'
     ];
   
     if (!targetMeetingIds.includes(meetingId) || ignoredParticipants.includes(participantName)) {
