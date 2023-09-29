@@ -60,7 +60,15 @@ app.post('/webhook', (req, res) => {
   if(req.body.event === 'meeting.participant_joined') {
     const participantName = req.body.payload.object.participant.user_name;
     const meetingId = req.body.payload.object.id;
-   
+  
+    // List of meeting IDs you're interested in
+    const targetMeetingIds = [
+      '7529538283', '8230366299', '5944978371', '4541815666', '8240787316',
+      '7363344485', '8686142782', '7848749909', '6030598690', '3569538459',
+      '2943012912', '4835843786', '5088144791', '6446311624', '9773038851',
+      '4780763670'
+    ];
+  
     // List of participant names to ignore
     const ignoredParticipants = [
       'Vidhi Vashishth',
@@ -95,7 +103,7 @@ app.post('/webhook', (req, res) => {
     }
   
     const topic = req.body.payload.object.topic;
-    const chatMessage = `COACHING CALL: ${participantName} has joined their coaching session: "${topic}".`;
+    const chatMessage = `FLOATING COACHING CALL: ${participantName} has joined their coaching session: "${topic}".`;
     const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
