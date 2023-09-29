@@ -95,6 +95,7 @@ app.post('/webhook', (req, res) => {
       'Airic Carrillo',
       'Raditya Dwiprasta',
       'Rio Purnomo'
+      'Nishal Nandwani'
     ];
   
     if (!targetMeetingIds.includes(meetingId) || ignoredParticipants.includes(participantName)) {
