@@ -104,7 +104,7 @@ app.post('/webhook', (req, res) => {
     }
   
     const topic = req.body.payload.object.topic;
-    const chatMessage = `FLOATING COACHING CALL: ${participantName} has joined their coaching session: "${topic}".`;
+    const chatMessage = `COACHING CALL: ${participantName} has joined their coaching session: "${topic}".`;
     const postData = JSON.stringify({ 'text': chatMessage });
 
     const options = {
