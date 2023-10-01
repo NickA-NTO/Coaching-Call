@@ -126,8 +126,8 @@ app.post('/webhook', (req, res) => {
       console.error('Error sending message to Google Chat', error);
     });
 
-    //googleChatRequest.write(postData);
-    googleChatRequest.write("test-ABC");
+    googleChatRequest.write(postData);
+    //googleChatRequest.write("test-ABC");
     
     googleChatRequest.end();
 
